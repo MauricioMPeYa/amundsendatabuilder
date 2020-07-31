@@ -59,3 +59,11 @@ httplib2>=0.18.0
 unidecode
 
 requests==2.23.0,<3.0
+
+
+google
+google-cloud
+google-cloud-bigquery
+google_auth_httplib2
+google-api-python-client
+
