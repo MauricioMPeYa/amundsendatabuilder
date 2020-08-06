@@ -4,7 +4,8 @@ $ docker-compose -f docker-amundsen.yml up
 # For Atlas
 $ docker-compose -f docker-amundsen-atlas.yml up
 
-
+# setear variable de entorno con la cuenta de google
+ export GOOGLE_APPLICATION_CREDENTIALS=~/amundsen/amundsendatabuilder/example/scripts/cred_f_bpy_peya.json
 
 
 python3 -m venv venv
