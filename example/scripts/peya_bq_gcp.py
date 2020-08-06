@@ -62,17 +62,20 @@ from databuilder.transformer.bigquery_usage_transformer import BigqueryUsageTran
 from databuilder.publisher import neo4j_csv_publisher
 from databuilder.publisher.neo4j_csv_publisher import Neo4jCsvPublisher
 
+
+import time
 #import hdfs3
 
 #es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', 'localhost')
 #neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', 'localhost')
 
+
 es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '35.223.142.185')
 neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.66.160.232')
 
+
 es_port = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_PORT', 9200)
 neo_port = os.getenv('CREDENTIALS_NEO4J_PROXY_PORT', 7687)
-
 if len(sys.argv) > 1:
     es_host = sys.argv[1]
 if len(sys.argv) > 2:
@@ -82,9 +85,9 @@ es = Elasticsearch([
     {'host': es_host, 'port': es_port},
 ])
 
-DB_FILE = '/tmp/test.db'
-SQLITE_CONN_STRING = 'sqlite:////tmp/test.db'
-Base = declarative_base()
+#DB_FILE = '/tmp/test.db'
+#SQLITE_CONN_STRING = 'sqlite:////tmp/test.db'
+#Base = declarative_base()
 
 NEO4J_ENDPOINT = 'bolt://{}:{}'.format(neo_host, neo_port)
 
@@ -96,50 +99,18 @@ neo4j_password = 'test'
 LOGGER = logging.getLogger(__name__)
 
 
-def create_connection(db_file):
-    try:
-        conn = sqlite3.connect(db_file)
-        return conn
-    except Exception:
-        LOGGER.exception('exception')
-    return None
+#def create_connection(db_file):
+#    try:
+#        conn = sqlite3.connect(db_file)
+#        return conn
+#    except Exception:
+#        LOGGER.exception('exception')
+#    return None
 
 
-def connection_string():
-    return "mysql+pymysql://hiveuser:hivepassword@192.168.20.201:3306/metastore"
+#def connection_string():
+#    return "mysql+pymysql://hiveuser:hivepassword@192.168.20.201:3306/metastore"
 
-
-def run_hive_job(job_name):
-
-    where_clause_suffix = " "
-
-    tmp_folder = '/var/tmp/amundsen/{job_name}'.format(job_name=job_name)
-    node_files_folder = '{tmp_folder}/nodes'.format(tmp_folder=tmp_folder)
-    relationship_files_folder = '{tmp_folder}/relationships'.format(tmp_folder=tmp_folder)
-
-
-    job_config = ConfigFactory.from_dict({
-            'extractor.hive_table_metadata.{}'.format(HiveTableMetadataExtractor.WHERE_CLAUSE_SUFFIX_KEY): where_clause_suffix,
-            'extractor.hive_table_metadata.extractor.sqlalchemy.{}'.format(SQLAlchemyExtractor.CONN_STRING): connection_string(),
-        'loader.filesystem_csv_neo4j.node_dir_path': node_files_folder,
-        'loader.filesystem_csv_neo4j.relationship_dir_path': relationship_files_folder,
-        'loader.filesystem_csv_neo4j.delete_created_directories': True,
-        'publisher.neo4j.node_files_directory': node_files_folder,
-        'publisher.neo4j.relation_files_directory': relationship_files_folder,
-        'publisher.neo4j.neo4j_endpoint': neo4j_endpoint,
-        'publisher.neo4j.neo4j_user': neo4j_user,
-        'publisher.neo4j.neo4j_password': neo4j_password,
-        'publisher.neo4j.neo4j_encrypted': False,
-        'publisher.neo4j.job_publish_tag': 'unique_tag',  # should use unique tag here like {ds}
-        })
-    job = DefaultJob(
-            conf=job_config,
-            task=DefaultTask(
-                extractor=HiveTableMetadataExtractor(),
-                    loader=FsNeo4jCSVLoader()),
-            publisher=Neo4jCsvPublisher()
-            )
-    job.launch()
 
 def create_es_publisher_sample_job(elasticsearch_index_alias='table_search_index',
                                    elasticsearch_doc_type_key='table',
@@ -196,34 +167,6 @@ def create_es_publisher_sample_job(elasticsearch_index_alias='table_search_index
                      publisher=ElasticsearchPublisher())
     return job
 
-
-def create_last_updated_job():
-    # loader saves data to these folders and publisher reads it from here
-    tmp_folder = '/var/tmp/amundsen/last_updated_data'
-    node_files_folder = '{tmp_folder}/nodes'.format(tmp_folder=tmp_folder)
-    relationship_files_folder = '{tmp_folder}/relationships'.format(tmp_folder=tmp_folder)
-
-    task = DefaultTask(extractor=Neo4jEsLastUpdatedExtractor(),
-                       loader=FsNeo4jCSVLoader())
-
-    job_config = ConfigFactory.from_dict({
-        'extractor.neo4j_es_last_updated.model_class':
-            'databuilder.models.neo4j_es_last_updated.Neo4jESLastUpdated',
-
-        'loader.filesystem_csv_neo4j.node_dir_path': node_files_folder,
-        'loader.filesystem_csv_neo4j.relationship_dir_path': relationship_files_folder,
-        'publisher.neo4j.node_files_directory': node_files_folder,
-        'publisher.neo4j.relation_files_directory': relationship_files_folder,
-        'publisher.neo4j.neo4j_endpoint': neo4j_endpoint,
-        'publisher.neo4j.neo4j_user': neo4j_user,
-        'publisher.neo4j.neo4j_password': neo4j_password,
-        'publisher.neo4j.neo4j_encrypted': False,
-        'publisher.neo4j.job_publish_tag': 'unique_lastupdated_tag',  # should use unique tag here like {ds}
-    })
-
-    return DefaultJob(conf=job_config,
-                      task=task,
-                      publisher=Neo4jCsvPublisher())
 
 
 def run_bq_job(job_name):
@@ -365,37 +308,54 @@ def run_bq_tu_job(job_name):
 if __name__ == "__main__":
     # Uncomment next line to get INFO level logging
     # logging.basicConfig(level=logging.INFO)
+    
 
+    start_time_total = time.time()
+    
     print("EMPIEZA A CORRER EL DATABUILDER...")
 
-    if create_connection(DB_FILE):
+#    if create_connection(DB_FILE):
         #run_csv_job('example/sample_data/sample_table_column_stats.csv', 'test_table_column_stats',
         #            'databuilder.models.table_stats.TableColumnStats')
-        print("EMPIEZA A CORRER EL JOB...")
+    print("EMPIEZA A CORRER EL JOB DE CARGA DE METADATA DE TABLAS...")
 
-        #run_bq_job("test_bq")
+    start_time_neo4jtbl = time.time()
 
-        print("EMPIEZA A CORRER EL JOB DE WATERMARKS...")
+    run_bq_job("test_bq")
 
-        run_bq_wm_job("test_bq_wm")
+    print("TERMINA DE CORRER EL JOB DE CARGA DE METADATA DE TABLAS...")
+    print("--- tiempo total de ejecucion de carga de metadata en neo4j %s seconds ---" % (time.time() - start_time_neo4jtbl))
 
-        print("TERMINA DE CORRER EL JOB DE WATERMARKS...")
+    print("EMPIEZA A CORRER EL JOB DE WATERMARKS...")
 
-        print("EMPIEZA A CORRER EL JOB DE TABLE USAGE...")
-        run_bq_tu_job("test_bq_tu")
-        print("TERMINA DE CORRER EL JOB DE TABLE USAGE...")
+    start_time_wm = time.time()
 
-        #run_hive_job("test_hive_mauricio")
+    run_bq_wm_job("test_bq_wm")
 
-        print("TERMINA DE CORRER EL JOB...")
+    print("TERMINA DE CORRER EL JOB DE WATERMARKS...")
+    print("--- tiempo total de ejecucion de carga de watermarks en neo4j %s seconds ---" % (time.time() - start_time_wm))
 
-        job_es_table = create_es_publisher_sample_job(
-            elasticsearch_index_alias='table_search_index',
-            elasticsearch_doc_type_key='table',
-            entity_type='table',
-            model_name='databuilder.models.table_elasticsearch_document.TableESDocument')
-        job_es_table.launch()
+    print("EMPIEZA A CORRER EL JOB DE TABLE USAGE...")
 
+    start_time_tu = time.time()
+
+    run_bq_tu_job("test_bq_tu")
+    
+    print("TERMINA DE CORRER EL JOB DE TABLE USAGE...")
+    print("--- tiempo total de ejecucion de carga de table usage info en neo4j %s seconds ---" % (time.time() - start_time_tu))
+
+
+
+    job_es_table = create_es_publisher_sample_job(
+        elasticsearch_index_alias='table_search_index',
+        elasticsearch_doc_type_key='table',
+        entity_type='table',
+        model_name='databuilder.models.table_elasticsearch_document.TableESDocument')
+    job_es_table.launch()
+
+    print("TERMINA DE CORRER DATABUILDER...")
+
+    print("--- tiempo total de ejecucion %s seconds ---" % (time.time() - start_time_total))
         #create_last_updated_job().launch()
 
 

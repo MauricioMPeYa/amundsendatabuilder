@@ -55,15 +55,15 @@ from databuilder.extractor.bigquery_metadata_extractor import *
 
 #import hdfs3
 
-#es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '34.102.187.137')
-#neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '35.190.46.139')
+es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '35.223.142.185')
+neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.66.160.232')
 
-es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '35.222.112.172')
-neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.72.231.84')
+#es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', 'localhost')
+#neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', 'localhost')
 
 
-es_port = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_PORT', 80)
-neo_port = os.getenv('CREDENTIALS_NEO4J_PROXY_PORT', 80)
+es_port = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_PORT', 9200)
+neo_port = os.getenv('CREDENTIALS_NEO4J_PROXY_PORT', 7687)
 if len(sys.argv) > 1:
     es_host = sys.argv[1]
 if len(sys.argv) > 2:
@@ -290,4 +290,5 @@ if __name__ == "__main__":
 
 
         
+
 

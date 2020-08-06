@@ -1,0 +1,13 @@
+# For Neo4j Backend
+$ docker-compose -f docker-amundsen.yml up
+
+# For Atlas
+$ docker-compose -f docker-amundsen-atlas.yml up
+
+
+
+
+python3 -m venv venv
+source venv/bin/activate  
+pip3 install -r requirements.txt
+python3 setup.py install

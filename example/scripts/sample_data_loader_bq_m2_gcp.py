@@ -55,12 +55,7 @@ from databuilder.extractor.bigquery_metadata_extractor import *
 
 from databuilder.extractor.bigquery_watermark_extractor import *
 
-from databuilder.extractor.bigquery_usage_extractor import *
 
-from databuilder.transformer.bigquery_usage_transformer import BigqueryUsageTransformer
-
-from databuilder.publisher import neo4j_csv_publisher
-from databuilder.publisher.neo4j_csv_publisher import Neo4jCsvPublisher
 
 #import hdfs3
 
@@ -70,9 +65,9 @@ from databuilder.publisher.neo4j_csv_publisher import Neo4jCsvPublisher
 es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '35.223.142.185')
 neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.66.160.232')
 
+
 es_port = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_PORT', 9200)
 neo_port = os.getenv('CREDENTIALS_NEO4J_PROXY_PORT', 7687)
-
 if len(sys.argv) > 1:
     es_host = sys.argv[1]
 if len(sys.argv) > 2:
@@ -271,7 +266,7 @@ def run_bq_job(job_name):
 
 
 def run_bq_wm_job(job_name):
-
+    
     #where_clause_suffix = " "
     gcloud_project = "peya-data-pocs"
     #label_filter = ""
@@ -313,55 +308,6 @@ def run_bq_wm_job(job_name):
 
     job.launch()
 
-
-def run_bq_tu_job(job_name):
-    
-    #where_clause_suffix = " "
-    gcloud_project = "peya-data-pocs"
-    #label_filter = ""
-
-    tmp_folder = '/var/tmp/amundsen/{job_name}'.format(job_name=job_name)
-    node_files_folder = '{tmp_folder}/nodes'.format(tmp_folder=tmp_folder)
-    relationship_files_folder = '{tmp_folder}/relationships'.format(tmp_folder=tmp_folder)
-
-    bq_usage_extractor = BigQueryTableUsageExtractor()
-    csv_loader = FsNeo4jCSVLoader()
-
-    task = DefaultTask(extractor=bq_usage_extractor,
-                       loader=csv_loader,
-                       transformer=BigqueryUsageTransformer())
-
-    job_config = ConfigFactory.from_dict({
-        'extractor.bigquery_table_usage.{}'.format(BigQueryTableUsageExtractor.PROJECT_ID_KEY):
-            gcloud_project,
-        'loader.filesystem_csv_neo4j.{}'.format(FsNeo4jCSVLoader.NODE_DIR_PATH):
-            node_files_folder,
-        'loader.filesystem_csv_neo4j.{}'.format(FsNeo4jCSVLoader.RELATION_DIR_PATH):
-            relationship_files_folder,
-        'loader.filesystem_csv_neo4j.{}'.format(FsNeo4jCSVLoader.SHOULD_DELETE_CREATED_DIR):
-            True,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.NODE_FILES_DIR):
-            node_files_folder,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.RELATION_FILES_DIR):
-            relationship_files_folder,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.NEO4J_END_POINT_KEY):
-            neo4j_endpoint,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.NEO4J_USER):
-            neo4j_user,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.NEO4J_PASSWORD):
-            neo4j_password,
-        'publisher.neo4j.{}'.format(neo4j_csv_publisher.JOB_PUBLISH_TAG):
-            'unique_tag',  # should use unique tag here like {ds}
-    })
-
-
-    job = DefaultJob(conf=job_config,
-                     task=task,
-                     publisher=Neo4jCsvPublisher())    
-
-    job.launch()
-
-
 if __name__ == "__main__":
     # Uncomment next line to get INFO level logging
     # logging.basicConfig(level=logging.INFO)
@@ -373,18 +319,13 @@ if __name__ == "__main__":
         #            'databuilder.models.table_stats.TableColumnStats')
         print("EMPIEZA A CORRER EL JOB...")
 
-        #run_bq_job("test_bq")
+        run_bq_job("test_bq")
 
         print("EMPIEZA A CORRER EL JOB DE WATERMARKS...")
 
         run_bq_wm_job("test_bq_wm")
 
         print("TERMINA DE CORRER EL JOB DE WATERMARKS...")
-
-        print("EMPIEZA A CORRER EL JOB DE TABLE USAGE...")
-        run_bq_tu_job("test_bq_tu")
-        print("TERMINA DE CORRER EL JOB DE TABLE USAGE...")
-
         #run_hive_job("test_hive_mauricio")
 
         print("TERMINA DE CORRER EL JOB...")
@@ -397,5 +338,6 @@ if __name__ == "__main__":
         job_es_table.launch()
 
         #create_last_updated_job().launch()
+
 
 

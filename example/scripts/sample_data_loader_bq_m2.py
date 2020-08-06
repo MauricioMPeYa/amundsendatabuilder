@@ -55,8 +55,6 @@ from databuilder.extractor.bigquery_metadata_extractor import *
 
 from databuilder.extractor.bigquery_watermark_extractor import *
 
-from databuilder.extractor.bigquery_usage_extractor import *
-
 
 
 #import hdfs3
@@ -264,7 +262,7 @@ def run_bq_job(job_name):
 
 
 def run_bq_wm_job(job_name):
-
+    
     #where_clause_suffix = " "
     gcloud_project = "peya-data-pocs"
     #label_filter = ""
@@ -306,51 +304,6 @@ def run_bq_wm_job(job_name):
 
     job.launch()
 
-
-def run_bq_tu_job(job_name):
-    
-    #where_clause_suffix = " "
-    gcloud_project = "peya-data-pocs"
-    #label_filter = ""
-
-    tmp_folder = '/var/tmp/amundsen/{job_name}'.format(job_name=job_name)
-    node_files_folder = '{tmp_folder}/nodes'.format(tmp_folder=tmp_folder)
-    relationship_files_folder = '{tmp_folder}/relationships'.format(tmp_folder=tmp_folder)
-
-
-    job_config = ConfigFactory.from_dict({
-            'extractor.bigquery_table_usage.{}'.format(
-            BigQueryTableUsageExtractor.PROJECT_ID_KEY
-            ): gcloud_project,
-        'loader.filesystem_csv_neo4j.node_dir_path': node_files_folder,
-        'loader.filesystem_csv_neo4j.relationship_dir_path': relationship_files_folder,
-        'loader.filesystem_csv_neo4j.delete_created_directories': True,
-        'publisher.neo4j.node_files_directory': node_files_folder,
-        'publisher.neo4j.relation_files_directory': relationship_files_folder,
-        'publisher.neo4j.neo4j_endpoint': neo4j_endpoint,
-        'publisher.neo4j.neo4j_user': neo4j_user,
-        'publisher.neo4j.neo4j_password': neo4j_password,
-        'publisher.neo4j.neo4j_encrypted': False,
-        'publisher.neo4j.job_publish_tag': 'unique_tag',  # should use unique tag here like {ds}
-        })
-
-    #if label_filter:
-    #    job_config[
-    #        'extractor.bigquery_table_metadata.{}'
-    #        .format(BigQueryMetadataExtractor.FILTER_KEY)
-    #        ] = label_filter
-
-    task = DefaultTask(extractor= BigQueryTableUsageExtractor(),
-                       loader=FsNeo4jCSVLoader(),
-                       transformer=NoopTransformer())
-
-    job = DefaultJob(conf=ConfigFactory.from_dict(job_config),
-                     task=task,
-                     publisher=Neo4jCsvPublisher())
-
-    job.launch()
-
-
 if __name__ == "__main__":
     # Uncomment next line to get INFO level logging
     # logging.basicConfig(level=logging.INFO)
@@ -369,11 +322,6 @@ if __name__ == "__main__":
         run_bq_wm_job("test_bq_wm")
 
         print("TERMINA DE CORRER EL JOB DE WATERMARKS...")
-
-        print("EMPIEZA A CORRER EL JOB DE TABLE USAGE...")
-        run_bq_tu_job("test_bq_tu")
-        print("TERMINA DE CORRER EL JOB DE TABLE USAGE...")
-
         #run_hive_job("test_hive_mauricio")
 
         print("TERMINA DE CORRER EL JOB...")
@@ -386,4 +334,6 @@ if __name__ == "__main__":
         job_es_table.launch()
 
         #create_last_updated_job().launch()
+
+
 

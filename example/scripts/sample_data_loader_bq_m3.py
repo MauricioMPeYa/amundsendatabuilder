@@ -308,7 +308,7 @@ def run_bq_wm_job(job_name):
 
 
 def run_bq_tu_job(job_name):
-
+    
     #where_clause_suffix = " "
     gcloud_project = "peya-data-pocs"
     #label_filter = ""
@@ -386,3 +386,5 @@ if __name__ == "__main__":
         job_es_table.launch()
 
         #create_last_updated_job().launch()
+
+
