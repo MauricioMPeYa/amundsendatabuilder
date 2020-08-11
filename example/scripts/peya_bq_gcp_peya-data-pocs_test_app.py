@@ -308,9 +308,10 @@ def run_bq_tu_job(job_name):
 
 
 
-    def run_bq_app_job(job_name):
+def run_bq_app_job(job_name):
     
     #where_clause_suffix = " "
+    
     gcloud_project = "peya-data-pocs"
     #label_filter = ""
 
