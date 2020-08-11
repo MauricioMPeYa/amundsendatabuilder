@@ -346,13 +346,10 @@ def run_bq_app_job(job_name):
                        loader=FsNeo4jCSVLoader(),
                        transformer=NoopTransformer())
 
-    #job = DefaultJob(conf=ConfigFactory.from_dict(job_config),
-    #                 task=task,
-    #                 publisher=Neo4jCsvPublisher())
-    
-    job = DefaultJob(conf=job_config,
+    job = DefaultJob(conf=ConfigFactory.from_dict(job_config),
                      task=task,
                      publisher=Neo4jCsvPublisher())
+    
 
     job.launch()
 
