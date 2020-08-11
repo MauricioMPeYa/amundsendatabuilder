@@ -74,7 +74,7 @@ class BigQueryApplicationExtractor(BaseBigQueryExtractor):
                     dag_id='el_id',  # type: str,
                     application_url_template='el_template',  # type: str
                     db_name='bigquery',  # type: str
-                    cluster=cluster=tableRef['projectId'],  # type: str
+                    cluster=tableRef['projectId'],  # type: str
                     schema=tableRef['datasetId'],  # type: str
                     table_name=table_id,  # type: str
                     exec_date='20200811'
