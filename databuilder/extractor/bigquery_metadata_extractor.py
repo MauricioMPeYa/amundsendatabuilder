@@ -28,8 +28,7 @@ class BigQueryMetadataExtractor(BaseBigQueryExtractor):
     This extractor supports nested columns, which are delimited by a dot (.) in the
     column name.
     """
-    PROJECT_ID_KEY = 'project_id'
-
+    
     def init(self, conf):
         # type: (ConfigTree) -> None
         BaseBigQueryExtractor.init(self, conf)
