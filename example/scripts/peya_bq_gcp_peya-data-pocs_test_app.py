@@ -321,7 +321,7 @@ def run_bq_app_job(job_name):
 
 
     job_config = ConfigFactory.from_dict({
-            'extractor.bigquery_table_application.{}'.format(
+            'extractor.bigquery_table_metadata.{}'.format(
             BigQueryApplicationExtractor.PROJECT_ID_KEY
             ): gcloud_project,
         'loader.filesystem_csv_neo4j.node_dir_path': node_files_folder,

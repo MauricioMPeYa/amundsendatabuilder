@@ -22,7 +22,7 @@ class BigQueryApplicationExtractor(BaseBigQueryExtractor):
     """ 
 
     """
-    PROJECT_ID_KEY = 'project_id'
+    #PROJECT_ID_KEY = 'project_id'
 
     def init(self, conf):
         # type: (ConfigTree) -> None
