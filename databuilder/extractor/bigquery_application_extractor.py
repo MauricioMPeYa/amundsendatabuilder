@@ -11,8 +11,8 @@ from databuilder.extractor.base_bigquery_extractor import BaseBigQueryExtractor
 from databuilder.models.application import Application
 
 
-#DatasetRef = namedtuple('DatasetRef', ['datasetId', 'projectId'])
-#TableKey = namedtuple('TableKey', ['schema', 'table_name'])
+DatasetRef = namedtuple('DatasetRef', ['datasetId', 'projectId'])
+TableKey = namedtuple('TableKey', ['schema', 'table_name'])
 
 LOGGER = logging.getLogger(__name__)
 
