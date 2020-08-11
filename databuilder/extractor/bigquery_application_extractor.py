@@ -94,4 +94,4 @@ class BigQueryApplicationExtractor(BaseBigQueryExtractor):
   
     def get_scope(self):
         # type: () -> str
-        return 'extractor.bigquery_table_aplication'
+        return 'extractor.bigquery_table_metadata'
