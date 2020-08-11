@@ -392,6 +392,14 @@ if __name__ == "__main__":
     print("TERMINA DE CORRER EL JOB DE TABLE USAGE...")
     print("--- tiempo total de ejecucion de carga de table usage info en neo4j %s seconds ---" % (time.time() - start_time_tu))
 
+    print("EMPIEZA A CORRER EL JOB DE APPLICATION...")
+
+    start_time_app = time.time()
+
+    run_bq_app_job("test_bq_app")
+    
+    print("TERMINA DE CORRER EL JOB DE APPLICATION...")
+    print("--- tiempo total de ejecucion de carga de application info en neo4j %s seconds ---" % (time.time() - start_time_tu))
 
 
     job_es_table = create_es_publisher_sample_job(
