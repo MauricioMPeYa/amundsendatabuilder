@@ -44,7 +44,7 @@ class BigQueryApplicationExtractor(BaseBigQueryExtractor):
                 if self._is_sharded_table(table_id):
                     # If the last eight characters are digits, we assume the table is of a table date range type
                     # and then we only need one schema definition
-                    table_prefix = table_id[:-BigQueryMetadataExtractor.DATE_LENGTH]
+                    table_prefix = table_id[:-BigQueryApplicationExtractor.DATE_LENGTH]
                     if table_prefix in self.grouped_tables:
                         # If one table in the date range is processed, then ignore other ones
                         # (it adds too much metadata)
@@ -56,18 +56,18 @@ class BigQueryApplicationExtractor(BaseBigQueryExtractor):
                 table = self.bigquery_service.tables().get(
                     projectId=tableRef['projectId'],
                     datasetId=tableRef['datasetId'],
-                    tableId=tableRef['tableId']).execute(num_retries=BigQueryMetadataExtractor.NUM_RETRIES)
+                    tableId=tableRef['tableId']).execute(num_retries=BigQueryApplicationExtractor.NUM_RETRIES)
 
                 # BigQuery tables also have interesting metadata about partitioning
                 # data location (EU/US), mod/create time, etc... Extract that some other time?
-                cols = []
+                #cols = []
                 # Not all tables have schemas
-                if 'schema' in table:
-                    schema = table['schema']
-                    if 'fields' in schema:
-                        total_cols = 0
-                        for column in schema['fields']:
-                            total_cols = self._iterate_over_cols('', column, cols, total_cols + 1)
+                #if 'schema' in table:
+                #    schema = table['schema']
+                #    if 'fields' in schema:
+                #        total_cols = 0
+                #        for column in schema['fields']:
+                #            total_cols = self._iterate_over_cols('', column, cols, total_cols + 1)
 
                 table_app = Application(
                     task_id='la_task',  # type: str
