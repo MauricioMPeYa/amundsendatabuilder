@@ -93,7 +93,7 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                 # ):
 
 
-                table_last_upd = TableLastUpdated(table_name=table_id, last_updated_time_epoch=str(int(table['creationTime'])/1000),schema=tableRef['datasetId'],db='bigquery',cluster=tableRef['projectId'])
+                table_last_upd = TableLastUpdated(table_name=table_id, last_updated_time_epoch=str(int(table['creationTime'])//1000),schema=tableRef['datasetId'],db='bigquery',cluster=tableRef['projectId'])
                     
                     #database='bigquery',
                     #cluster=tableRef['projectId'],
