@@ -11,6 +11,9 @@ from databuilder.extractor.base_bigquery_extractor import BaseBigQueryExtractor
 #from databuilder.models.application import Application
 from databuilder.models.table_last_updated import TableLastUpdated
 
+#TEST
+from datetime import datetime
+
 
 
 DatasetRef = namedtuple('DatasetRef', ['datasetId', 'projectId'])
@@ -64,7 +67,7 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                 # BigQuery tables also have interesting metadata about partitioning
                 # data location (EU/US), mod/create time, etc... Extract that some other time?
                 #cols = []
-                # Not all tables have schemas
+                # Not all tables have schemas9
                 #if 'schema' in table:
                 #    schema = table['schema']
                 #    if 'fields' in schema:
@@ -92,9 +95,14 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                 # cluster='gold'  # type: str
                 # ):
 
+                
+                # TEST                
                 print("########")
                 print(table_id)
                 print(table['lastModifiedTime'])
+                #print()
+                datetime.utcfromtimestamp(int(table['lastModifiedTime'])//1000).strftime('%Y-%m-%d %H:%M:%S')
+
                 print("########")
 
 
