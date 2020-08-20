@@ -92,6 +92,12 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                 # cluster='gold'  # type: str
                 # ):
 
+                print("########")
+                print(table_id)
+                print(table['lastModifiedTime'])
+                print("########")
+
+
 
                 table_last_upd = TableLastUpdated(table_name=table_id, last_updated_time_epoch=int(table['lastModifiedTime'])//1000,schema=tableRef['datasetId'],db='bigquery',cluster=tableRef['projectId'])
                     
