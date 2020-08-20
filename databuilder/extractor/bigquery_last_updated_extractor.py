@@ -101,7 +101,7 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                 print(table_id)
                 print(table['lastModifiedTime'])
                 #print()
-                datetime.utcfromtimestamp(int(table['lastModifiedTime'])//1000).strftime('%Y-%m-%d %H:%M:%S')
+                print(datetime.utcfromtimestamp(int(table['lastModifiedTime'])//1000).strftime('%Y-%m-%d %H:%M:%S'))
 
                 print("########")
 
