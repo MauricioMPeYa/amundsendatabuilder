@@ -130,6 +130,13 @@ class FsNeo4jCSVLoader(Loader):
             node_dict = csv_serializable.next_node()
 
         relation_dict = csv_serializable.next_relation()
+
+
+        ###TEST
+        print("####")
+        print(node_dict)
+
+
         while relation_dict:
             key2 = (relation_dict[RELATION_START_LABEL],
                     relation_dict[RELATION_END_LABEL],
