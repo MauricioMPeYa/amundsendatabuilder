@@ -383,9 +383,11 @@ def run_amndsn_last_upd_job():
         'publisher.neo4j.job_publish_tag': 'unique_lastupdated_tag',  # should use unique tag here like {ds}
     })
 
-    return DefaultJob(conf=job_config,
+    job = DefaultJob(conf=job_config,
                       task=task,
                       publisher=Neo4jCsvPublisher())
+    
+    job.launch()
 
 
 
@@ -436,25 +438,27 @@ if __name__ == "__main__":
     #run_bq_app_job("test_bq_app")
     
     print("TERMINA DE CORRER EL JOB DE APPLICATION...")
+    print("--- tiempo total de ejecucion de carga de app info neo4j %s seconds ---" % (time.time() - start_time_app))
 
-    print("EMPIEZA A CORRER EL JOB DE LAST UPDATED...")
+    print("EMPIEZA A CORRER EL JOB DE TABLE LAST UPDATED...")
 
-    start_time_app = time.time()
+    start_time_last_upd = time.time()
 
-    run_bq_last_upd_job("test_bq_app")
+    run_bq_last_upd_job("test_bq_lu")
     
-    print("TERMINA DE CORRER EL JOB DE LAST UPDATED...")
-
-
-
+    print("TERMINA DE CORRER EL JOB DE TABLE LAST UPDATED...")
+    print("--- tiempo total de ejecucion de carga de table last updated neo4j %s seconds ---" % (time.time() - start_time_last_upd))
     
-    print("EMPIEZA A CORRER EL JOB DE LAST UPDATED...")
+    print("EMPIEZA A CORRER EL JOB DE AMUNDSEN LAST UPDATED...")
+
+    start_time_amndsn_last_upd = time.time()
+
     #create_last_updated_job
-    run_amndsn_last_upd_job().launch()
+    run_amndsn_last_upd_job()
     print("TERMINA DE CORRER EL JOB DE AMUNDSEN LAST UPDATED...")
 
 
-    print("--- tiempo total de ejecucion de carga de application info en neo4j %s seconds ---" % (time.time() - start_time_tu))
+    print("--- tiempo total de ejecucion de carga de amundsen last updated info en neo4j %s seconds ---" % (time.time() - start_time_amndsn_last_upd))
 
 
     job_es_table = create_es_publisher_sample_job(
@@ -467,6 +471,5 @@ if __name__ == "__main__":
     print("TERMINA DE CORRER DATABUILDER...")
 
     print("--- tiempo total de ejecucion %s seconds ---" % (time.time() - start_time_total))
-        #create_last_updated_job().launch()
 
 
