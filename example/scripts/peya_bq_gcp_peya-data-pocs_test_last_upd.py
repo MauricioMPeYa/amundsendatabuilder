@@ -450,7 +450,7 @@ if __name__ == "__main__":
     
     print("EMPIEZA A CORRER EL JOB DE LAST UPDATED...")
     #create_last_updated_job
-    run_amndsn_last_upd_job()
+    run_amndsn_last_upd_job().launch()
     print("TERMINA DE CORRER EL JOB DE AMUNDSEN LAST UPDATED...")
 
 
