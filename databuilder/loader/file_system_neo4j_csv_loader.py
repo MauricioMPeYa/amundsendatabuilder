@@ -140,10 +140,6 @@ class FsNeo4jCSVLoader(Loader):
 
 
         while relation_dict:
-            ###TEST
-            print("####")
-            print(relation_dict)
-            ###TEST
             key2 = (relation_dict[RELATION_START_LABEL],
                     relation_dict[RELATION_END_LABEL],
                     relation_dict[RELATION_TYPE],
