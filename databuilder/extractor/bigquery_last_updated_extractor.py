@@ -64,48 +64,10 @@ class BigQueryLastUpdatedExtractor(BaseBigQueryExtractor):
                     datasetId=tableRef['datasetId'],
                     tableId=tableRef['tableId']).execute(num_retries=BigQueryLastUpdatedExtractor.NUM_RETRIES)
 
-                # BigQuery tables also have interesting metadata about partitioning
-                # data location (EU/US), mod/create time, etc... Extract that some other time?
-                #cols = []
-                # Not all tables have schemas9
-                #if 'schema' in table:
-                #    schema = table['schema']
-                #    if 'fields' in schema:
-                #        total_cols = 0
-                #        for column in schema['fields']:
-                #            total_cols = self._iterate_over_cols('', column, cols, total_cols + 1)
-
-                #table_app = Application(
-                #    task_id='la_task',  # type: str
-                #    dag_id='el_id',  # type: str,
-                #    application_url_template='el_template',  # type: str
-                #    db_name='bigquery',  # type: str
-                #    cluster=tableRef['projectId'],  # type: str
-                #    schema=tableRef['datasetId'],  # type: str
-                #    table_name=table_id,  # type: str
-                #    exec_date='20200811'
-                #)
-
-                #TableLastUpdated
-                #def __init__(self,
-                # table_name,  # type: str
-                # last_updated_time_epoch,  # type: int
-                # schema,  # type: str
-                # db='hive',  # type: str
-                # cluster='gold'  # type: str
-                # ):
-
                                 
                 table_last_upd = TableLastUpdated(table_name=table_id, last_updated_time_epoch=int(table['lastModifiedTime'])//1000,schema=tableRef['datasetId'],db='bigquery',cluster=tableRef['projectId'])
                     
-                    #database='bigquery',
-                    #cluster=tableRef['projectId'],
-                    #schema=tableRef['datasetId'],
-                    #name=table_id,
-                    #description=table.get('description', ''),
-                    #columns=cols,
-                    #is_view=table['type'] == 'VIEW')
-
+                    
                 yield(table_last_upd)
 
   

@@ -74,16 +74,13 @@ class BigQueryMetadataExtractor(BaseBigQueryExtractor):
                         total_cols = 0
                         for column in schema['fields']:
                             total_cols = self._iterate_over_cols('', column, cols, total_cols + 1)
-                
-                # like DH does
-                link = f'https://console.cloud.google.com/bigquery?' \
-                    f'&p={tableRef["projectId"]}&d={tableRef["datasetId"]}&t={table_id}&page=table'
+
                 table_meta = TableMetadata(
                     database='bigquery',
                     cluster=tableRef['projectId'],
                     schema=tableRef['datasetId'],
                     name=table_id,
-                    description=f'{table.get("description", "")}\nYou can find the table [here]({link}).',
+                    description=table.get('description', ''),
                     columns=cols,
                     is_view=table['type'] == 'VIEW')
 

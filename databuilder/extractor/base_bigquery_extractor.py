@@ -102,6 +102,16 @@ class BaseBigQueryExtractor(Extractor):
             filter=self.filter,
             maxResults=self.pagesize).execute(
                 num_retries=BaseBigQueryExtractor.NUM_RETRIES)
+        
+        # TEST
+        filtered_dataset=[]
+        found = False
+        i=0
+        while i < len(response['datasets']) and not found :
+            found = (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
+            if found : filtered_dataset.append(response['datasets'][i])
+            i+=1
+        response['datasets'] = filtered_dataset
 
         while response:
             yield response
