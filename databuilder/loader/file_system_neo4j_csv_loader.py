@@ -119,10 +119,6 @@ class FsNeo4jCSVLoader(Loader):
 
         node_dict = csv_serializable.next_node()
         while node_dict:
-            ###TEST
-            print("####")
-            print(node_dict)
-            ###TEST
             key = (node_dict[NODE_LABEL], len(node_dict))
             file_suffix = '{}_{}'.format(*key)
             node_writer = self._get_writer(node_dict,
