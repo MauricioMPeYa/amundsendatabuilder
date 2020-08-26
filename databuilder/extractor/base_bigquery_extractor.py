@@ -103,15 +103,17 @@ class BaseBigQueryExtractor(Extractor):
             maxResults=self.pagesize).execute(
                 num_retries=BaseBigQueryExtractor.NUM_RETRIES)
         
-        # TEST
-        filtered_dataset=[]
-        found = False
-        i=0
-        while i < len(response['datasets']) and not found :
-            found = (response['datasets'][i]['datasetReference']['datasetId'] == 'General_Tables')
-            if found : filtered_dataset.append(response['datasets'][i])
-            i+=1
-        response['datasets'] = filtered_dataset
+        # TEST FILTER
+        #filtered_dataset=[]
+        #found = False
+        #i=0
+        #while i < len(response['datasets']) and not found :
+        #    found = (response['datasets'][i]['datasetReference']['datasetId'] == 'General_Tables')
+        #    if found : filtered_dataset.append(response['datasets'][i])
+        #    i+=1
+        #response['datasets'] = filtered_dataset
+        # TEST FILTER
+
 
         while response:
             yield response
