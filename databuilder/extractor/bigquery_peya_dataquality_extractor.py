@@ -11,7 +11,7 @@ from databuilder.extractor.base_bigquery_extractor import BaseBigQueryExtractor
 #from databuilder.models.application import Application
 from databuilder.models.table_last_updated import TableLastUpdated
 
-from databuilder.models.table_metadata import DescriptionMetadata
+from databuilder.models.table_metadata import *
 
 
 #TEST
@@ -67,8 +67,23 @@ class BigQueryPeyaDQExtractor(BaseBigQueryExtractor):
                 #    datasetId=tableRef['datasetId'],
                 #    tableId=tableRef['tableId']).execute(num_retries=BigQueryPeyaDQExtractor.NUM_RETRIES)
 
-                                
-                table_dq = DescriptionMetadata(text= f'TESTING MAURICIO')
+                #table_meta = TableMetadata(
+                #    database='bigquery',
+                #    cluster=tableRef['projectId'],
+                #    schema=tableRef['datasetId'],
+                #    name=table_id,
+                #    description=f'{table.get("description", "")}\nYou can find the table [here]({link}).',
+                #    columns=cols,
+                #    is_view=table['type'] == 'VIEW')
+
+                table_dq = TableMetadata(
+                    database='bigquery',
+                    cluster=tableRef['projectId'],
+                    schema=tableRef['datasetId'],
+                    name=table_id,
+                    description=f'testing MAURICIO',
+                    description_source = 'quality_service',
+                    is_view=table['type'] == 'VIEW')
                     
                     
                 yield(table_dq)
