@@ -16,7 +16,8 @@ from databuilder.models.table_metadata import *
 
 #TEST
 from datetime import datetime
-
+import requests
+import json
 
 
 DatasetRef = namedtuple('DatasetRef', ['datasetId', 'projectId'])
@@ -76,12 +77,19 @@ class BigQueryPeyaDQExtractor(BaseBigQueryExtractor):
                 #    columns=cols,
                 #    is_view=table['type'] == 'VIEW')
 
+                desc_quality = 'N/A'
+
+                if table_id == 'cart_checkout_raw_data'  :
+                    payload = {'table_id': table_id}
+                    resp = requests.post('http://localhost:16000/tables', params=payload)
+                    desc_quality = 'DQ value : {} \n DQ value 2: {}'.format(resp.json()['dq'],resp.json()['dq2'])
+
                 table_dq = TableMetadata(
                     database='bigquery',
                     cluster=tableRef['projectId'],
                     schema=tableRef['datasetId'],
                     name=table_id,
-                    description=f'testing MAURICIO',
+                    description=desc_quality,
                     description_source = 'quality_service',
                     is_view=table['type'] == 'VIEW')
                     
