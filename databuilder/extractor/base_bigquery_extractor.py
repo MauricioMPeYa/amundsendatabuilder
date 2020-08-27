@@ -104,14 +104,15 @@ class BaseBigQueryExtractor(Extractor):
                 num_retries=BaseBigQueryExtractor.NUM_RETRIES)
         
         # TEST FILTER
-        #filtered_dataset=[]
-        #found = False
-        #i=0
-        #while i < len(response['datasets']) and not found :
-        #    found = (response['datasets'][i]['datasetReference']['datasetId'] == 'General_Tables')
-        #    if found : filtered_dataset.append(response['datasets'][i])
-        #    i+=1
-        #response['datasets'] = filtered_dataset
+        filtered_dataset=[]
+        found = False
+        i=0
+        while i < len(response['datasets']) and not found :
+            found = (response['datasets'][i]['datasetReference']['datasetId'] == 'General_Tables')
+            found = found or (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
+            if found : filtered_dataset.append(response['datasets'][i])
+            i+=1
+        response['datasets'] = filtered_dataset
         # TEST FILTER
 
 
