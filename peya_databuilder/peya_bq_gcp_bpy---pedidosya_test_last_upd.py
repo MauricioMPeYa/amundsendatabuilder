@@ -78,8 +78,8 @@ es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', 'localhost')
 neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', 'localhost')
 
 #
-#es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '35.223.142.185')
-#neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.66.160.232')
+#es_host = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_HOST', '34.69.128.58')
+#neo_host = os.getenv('CREDENTIALS_NEO4J_PROXY_HOST', '34.70.108.106')
 
 
 es_port = os.getenv('CREDENTIALS_ELASTICSEARCH_PROXY_PORT', 9200)
