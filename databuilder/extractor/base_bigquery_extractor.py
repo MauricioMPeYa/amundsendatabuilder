@@ -119,7 +119,9 @@ class BaseBigQueryExtractor(Extractor):
         i=0
         if len(self.lista_datasets) > 0 :
             while i < len(response['datasets']) and not found :
+                print(response['datasets'][i]['datasetReference']['datasetId'])
                 found = (response['datasets'][i]['datasetReference']['datasetId'] in self.lista_datasets)
+                print(found)
                 #found = found or (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
                 if found : filtered_dataset.append(response['datasets'][i])
                 i+=1
