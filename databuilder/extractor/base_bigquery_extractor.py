@@ -65,7 +65,7 @@ class BaseBigQueryExtractor(Extractor):
         self.iter = iter(self._iterate_over_tables())
         # Peya - added to select datasets to be loaded
         self.lista_datasets=[]
-        with open("../../datasets.yaml", 'r') as stream:
+        with open("../datasets.yaml", 'r') as stream:
             out = yaml.load(stream)
             self.lista_datasets=out['Datasets_load']['List']
 
