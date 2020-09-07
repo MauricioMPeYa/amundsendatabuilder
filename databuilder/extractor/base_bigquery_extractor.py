@@ -4,6 +4,7 @@
 import json
 import logging
 from collections import namedtuple
+import yaml
 
 import google.oauth2.service_account
 import google_auth_httplib2
@@ -62,6 +63,12 @@ class BaseBigQueryExtractor(Extractor):
         self.bigquery_service = build('bigquery', 'v2', http=authed_http, cache_discovery=False)
         self.logging_service = build('logging', 'v2', http=authed_http, cache_discovery=False)
         self.iter = iter(self._iterate_over_tables())
+        # Peya - added to select datasets to be loaded
+        self.lista_datasets=[]
+        with open("../../datasets.yaml", 'r') as stream:
+            out = yaml.load(stream)
+            self.lista_datasets=out['Datasets_load']['List']
+
 
     def extract(self):
         # type: () -> Any
@@ -104,15 +111,16 @@ class BaseBigQueryExtractor(Extractor):
                 num_retries=BaseBigQueryExtractor.NUM_RETRIES)
         
         # TEST FILTER
-        #filtered_dataset=[]
-        #found = False
-        #i=0
-        #while i < len(response['datasets']) and not found :
-        #    found = (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
-            #found = found or (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
-        #    if found : filtered_dataset.append(response['datasets'][i])
-        #    i+=1
-        #response['datasets'] = filtered_dataset
+        filtered_dataset=[]
+        found = False
+        i=0
+        if len(self.lista_datasets) > 0 :
+            while i < len(response['datasets']) and not found :
+                found = (response['datasets'][i]['datasetReference']['datasetId'] in self.lista_datasets)
+                #found = found or (response['datasets'][i]['datasetReference']['datasetId'] == 'Checkout')
+                if found : filtered_dataset.append(response['datasets'][i])
+                i+=1
+            response['datasets'] = filtered_dataset
         # TEST FILTER
 
 
