@@ -5,7 +5,8 @@ import json
 import logging
 from collections import namedtuple
 import yaml
-import os
+from yaml import load, SafeLoader
+#import os
 
 import google.oauth2.service_account
 import google_auth_httplib2
@@ -65,10 +66,10 @@ class BaseBigQueryExtractor(Extractor):
         self.logging_service = build('logging', 'v2', http=authed_http, cache_discovery=False)
         self.iter = iter(self._iterate_over_tables())
         # Peya - added to select datasets to be loaded
-        print(os.getcwd())
+        #print(os.getcwd())
         self.lista_datasets=[]
         with open("datasets.yaml", 'r') as stream:
-            out = yaml.load(stream)
+            out = yaml.load(stream, Loader=SafeLoader)
             self.lista_datasets=out['Datasets_load']['List']
         
 
@@ -118,7 +119,7 @@ class BaseBigQueryExtractor(Extractor):
         found = False
         i=0
         if len(self.lista_datasets) > 0 :
-            while i < len(response['datasets']) and not found :
+            while i < len(response['datasets']) :
                 print(response['datasets'][i]['datasetReference']['datasetId'])
                 found = (response['datasets'][i]['datasetReference']['datasetId'] in self.lista_datasets)
                 print(found)
